@@ -11,7 +11,7 @@
 #include <SPI.h>
 #include <RH_RF95.h>
 
-
+//Pins for LORA module
 #define RFM95_CS 4
 #define RFM95_RST 2
 #define RFM95_INT 3
@@ -32,14 +32,16 @@ RH_RF95 rf95(RFM95_CS, RFM95_INT);
    4800-baud serial GPS device hooked up on pins 4(rx) and 3(tx).
 */
 
+//Tiny gps object
 TinyGPS gps;
+
 // 5 = rx
 // 6 = tx not used but needed to make SoftwareSerial object.
 SoftwareSerial ss(5, 6);
 
+//Buffers for storing char array latitude and longitude
 char bufferlat[12];
 char bufferlon[12];
-char buffermain[22];
 
 String sendString;
 
@@ -107,34 +109,44 @@ void loop()
 
   }
 
+  //Only update gps cooridinates if a new valid value is polled
   if (newData) {
     float flat, flon;
     unsigned long age;
+
+    //Getting GPS cooridinates
     gps.f_get_position(&flat, &flon, &age);
+    //Checking to see if invalid
     flat = (flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : flat);
     flon = (flon == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : flon);
+
     Serial.println("LAT=");
-    Serial.println(flat, 6);
-    Serial.println(" LON=");
+    Serial.println(flat, 6); //Prints cooridinates to 6 degrees of persicsion
+    Serial.println("LON=");
     Serial.println(flon, 6);
 
+    //Convering to char array
     dtostrf(flat, 11, 6, bufferlat);
     Serial.println(bufferlat);
     dtostrf(flon, 11, 6, bufferlon);
     Serial.println(bufferlon);
 
+    //Print final sting for debugging char array conversion
     Serial.println(String("Sending: ") + String(bufferlat) + String(", ") + String(bufferlon));
 
     
   } else {
-    Serial.println("No new data try going outside");
+    Serial.println("No new data try going outside"); //Problem typically aireses from no GPS connection
 
   }
 
+  //Converting to String object, very ew...
   sendString = (String(bufferlat) + String(", ") + String(bufferlon));
 
+  //Empty uint8_t array for conversion
   uint8_t dataArray[sendString.length() + 1];
   
+  //Writing final combined Sting object to the empty uint8_t array
   sendString.toCharArray(dataArray, sendString.length() + 1);
 
   //LORA send Loop
@@ -167,6 +179,9 @@ void loop()
   {
     Serial.println("No reply, is there a listener around?");
   }
+  
+  //Delay between each sent message
+  //Decrease for more frequent messages
   delay(1000);
 
 }
