@@ -1,0 +1,6 @@
+{
+    "sketch": "GPS_test.ino",
+    "board": "arduino:avr:uno",
+    "port": "COM11",
+    "programmer": "AVR ISP"
+}

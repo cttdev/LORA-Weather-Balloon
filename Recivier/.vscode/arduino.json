@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "programmer": "AVR ISP",
+    "port": "COM6",
+    "sketch": "LORA_TESTv2_RECIVER.ino"
+}
