@@ -11,7 +11,7 @@ As for the Sparkfun GP-20U7 GPS receiver, the `RX` out on the breakout should be
 
 ## Troubleshooting 
 
-If you don't see `LAT =` and `LON =` and instead `"No new data try going outside"` the GPS receiver mostly likely hasn't locked onto a satali and try moving a more open area to gain connection, it may take a while.
+If you don't see `LAT =` and `LON =` and instead `"No new data try going outside"` the GPS receiver mostly likely hasn't locked onto a satalite. Try moving a more open area to gain connection, it may take a while.
 
-If the LORA boards don't seem to be initializing remember to change the frequency at line 22 `#define RF95_FREQ 915.0` to the frequency of the boards you bought. It should be on the product page.
+If the LORA boards don't seem to be initializing check if you changed the frequency at line 22 `#define RF95_FREQ 915.0` to the frequency of the boards you bought. It should be on the product page.
 
